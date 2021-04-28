@@ -1,0 +1,98 @@
+﻿@model Upravuvanje.ViewModels.CourseViewModels
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Листа на предмети</h1>
+
+<p>
+    <a asp-action="Create">Креирај нов предмет</a>
+</p>
+<form asp-controller="Courses" asp-action="Index" method="get">
+    <p><span>Програма:</span>
+        <select asp-for="PredmetPrograma" asp-items="Model.Programa">
+            <option value="">Сите</option>
+        </select><span>Семестар:</span>
+        <select asp-for="PredmetSemestar" asp-items="Model.Semestar">
+            <option value="">Сите</option>
+        </select>
+        Наслов: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Филтрирај" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Semestar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Programme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].EducationLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Teacher1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Teacher2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Students)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Predmeti) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semestar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EducationLevel)
+            </td>
+            <td>
+                @if (item.FirstTeacherId != null)
+                {
+                    <a asp-controller="Teachers" asp-action="Details" asp-route-id="@item.FirstTeacherId"> @Html.DisplayFor(modelItem => item.Teacher1.FullName)</a>
+                }
+            </td>
+            <td>
+                @if (item.SecondTeacherId != null)
+                {
+                    <a asp-controller="Teachers" asp-action="Details" asp-route-id="@item.SecondTeacherId"> @Html.DisplayFor(modelItem => item.Teacher2.FullName)</a>
+                }
+            </td>
+            <td>
+                @foreach (var student in item.Students)
+                {
+                    <a asp-controller="Students" asp-action="Details" asp-route-id="@student.StudentId"> @student.Student.FullName </a> <br />
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Измени</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Избриши</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
