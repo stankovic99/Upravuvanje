@@ -10,7 +10,8 @@
     <a asp-action="Create">Креирај нов предмет</a>
 </p>
 <form asp-controller="Courses" asp-action="Index" method="get">
-    <p><span>Програма:</span>
+    <p>
+        <span>Програма:</span>
         <select asp-for="PredmetPrograma" asp-items="Model.Programa">
             <option value="">Сите</option>
         </select><span>Семестар:</span>
@@ -40,59 +41,60 @@
                 @Html.DisplayNameFor(model => model.Predmeti[0].EducationLevel)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Predmeti[0].Teacher1)
+                Наставник 1
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Predmeti[0].Teacher2)
+                Наставник 2
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Predmeti[0].Students)
+                Студенти
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Predmeti) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credits)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Semestar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Programme)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EducationLevel)
-            </td>
-            <td>
-                @if (item.FirstTeacherId != null)
-                {
-                    <a asp-controller="Teachers" asp-action="Details" asp-route-id="@item.FirstTeacherId"> @Html.DisplayFor(modelItem => item.Teacher1.FullName)</a>
-                }
-            </td>
-            <td>
-                @if (item.SecondTeacherId != null)
-                {
-                    <a asp-controller="Teachers" asp-action="Details" asp-route-id="@item.SecondTeacherId"> @Html.DisplayFor(modelItem => item.Teacher2.FullName)</a>
-                }
-            </td>
-            <td>
-                @foreach (var student in item.Students)
-                {
-                    <a asp-controller="Students" asp-action="Details" asp-route-id="@student.StudentId"> @student.Student.FullName </a> <br />
-                }
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Измени</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Избриши</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Predmeti)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credits)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Semestar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Programme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EducationLevel)
+                </td>
+                <td>
+                    @if (item.FirstTeacherId != null)
+                    {
+                        <a asp-controller="Teachers" asp-action="Details" asp-route-id="@item.FirstTeacherId"> @Html.DisplayFor(modelItem => item.Teacher1.FullName)</a>
+                    }
+                </td>
+                <td>
+                    @if (item.SecondTeacherId != null)
+                    {
+                        <a asp-controller="Teachers" asp-action="Details" asp-route-id="@item.SecondTeacherId"> @Html.DisplayFor(modelItem => item.Teacher2.FullName)</a>
+                    }
+                </td>
+                <td>
+                    @foreach (var student in item.Students)
+                    {
+                        <a asp-controller="Students" asp-action="Details" asp-route-id="@student.StudentId"> @student.Student.FullName </a> <br />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Измени</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Избриши</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

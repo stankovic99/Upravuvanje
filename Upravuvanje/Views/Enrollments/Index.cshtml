@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Upravuvanje.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Листа на предмети и студенти</h1>
+
+<p>
+    <a asp-action="Create">Запиши нов студент</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Предмет
+            </th>
+            <th>
+               Студент
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student.Indeks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Semestar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeminalUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Indeks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semestar)
+            </td>
+            <td>
+                <a href="~/projects/@Html.DisplayFor(modelItem => item.SeminalUrl)" download>
+                    @Html.DisplayFor(modelItem => item.SeminalUrl)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Измени</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Избриши</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

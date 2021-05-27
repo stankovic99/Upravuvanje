@@ -1,0 +1,41 @@
+﻿@model Upravuvanje.ViewModels.StudentViewModels
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Листа на студенти</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Студенти
+            </th>
+            <th>
+                Индекс
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Students)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Indeks)
+                </td>
+               
+                <td>
+                    <a asp-action="Predmet" asp-route-id="@item.Id">Предмети</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

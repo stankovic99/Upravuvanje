@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Upravuvanje.Models;
 
-namespace Upravuvanje.Models
+namespace Upravuvanje.ViewModels
 {
-    public class Enrollment
+    public class EnrollmentViewModels
     {
-        public int Id { get; set; }
-
         [Display(Name = "Семестар")]
         public string? Semestar { get; set; }
 
@@ -19,8 +19,7 @@ namespace Upravuvanje.Models
         [Display(Name = "Оцена")]
         public int? Grade { get; set; }
 
-        [Display(Name = "Семинарска")]
-        public string? SeminalUrl { get; set; }
+        
 
         [Display(Name = "Проект")]
         public string? ProjectUrl { get; set; }
@@ -40,9 +39,5 @@ namespace Upravuvanje.Models
         [Display(Name = "Завршен датум")]
         [DataType(DataType.Date)]
         public DateTime? FinishDate { get; set; }
-        public int StudentId { get; set; }
-        public Student Student { get; set; }
-        public int CourseId { get; set; }
-        public Course Course { get; set; }
     }
 }

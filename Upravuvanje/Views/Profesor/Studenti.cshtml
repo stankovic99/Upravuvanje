@@ -1,0 +1,49 @@
+﻿@model Upravuvanje.Models.Course
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@ViewData["CourseId"]</h1>
+<h4>Листа на студенти</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Име и презиме
+            </th>
+            <th>
+                Индекс
+            </th>
+            <th>
+                Семестар
+            </th>
+            <th>
+                Година
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Students)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Indeks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.CurrentSemestar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.EnrollmentDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Измени</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

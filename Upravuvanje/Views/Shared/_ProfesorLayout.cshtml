@@ -18,37 +18,13 @@
                 </button>
 
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Предмети</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Teachers" asp-action="Index">Професори</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Студенти</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Запишани студенти</a>
-                            </li>
-                        }
-                        @if (User.Identity.IsAuthenticated && (User.IsInRole("Teacher")))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="Profesor/Index/1" >Предмет</a>
-                            </li>
-                        }
-                        @if (User.Identity.IsAuthenticated && (User.IsInRole("Student")))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="Student/Predmet/5">Предмети</a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="">Предмет</a>
+                        </li>
                     </ul>
                 </div>
+                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>

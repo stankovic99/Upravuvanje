@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Upravuvanje.Areas.Identity.Data;
 using Upravuvanje.Data;
 using Upravuvanje.Models;
 
@@ -11,12 +13,76 @@ namespace MVCMovie.Models
 {
     public class SeedData
     {
+        public static async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<UpravuvanjeUser>>();
+            IdentityResult roleResult;
+
+            //Add Admin Role
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck) { roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin")); }
+
+            //Add Admin User
+            UpravuvanjeUser user = await UserManager.FindByEmailAsync("admin@upravuvanje.com");
+            if (user == null)
+            {
+                var User = new UpravuvanjeUser();
+                User.Email = "admin@upravuvanje.com";
+                User.UserName = "admin@upravuvanje.com";
+                string userPWD = "Admin123";
+                IdentityResult chkUser = await UserManager.CreateAsync(User, userPWD);
+                //Add default User to Role Admin
+                if (chkUser.Succeeded) { var result1 = await UserManager.AddToRoleAsync(User, "Admin"); }
+            }
+
+            //Add Teacher Role
+            roleCheck = await RoleManager.RoleExistsAsync("Teacher");
+            if (!roleCheck)
+            {
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Teacher"));
+            }
+
+            user = await UserManager.FindByEmailAsync("profesor@upravuvanje.com");
+            if (user == null)
+            {
+                var User = new UpravuvanjeUser();
+                User.Email = "profesor@upravuvanje.com";
+                User.UserName = "profesor@upravuvanje.com";
+                User.TeacherId = 1;
+                string userPWD = "Profesor123";
+                IdentityResult chkUser = await UserManager.CreateAsync(User, userPWD);
+                if (chkUser.Succeeded) { var result1 = await UserManager.AddToRoleAsync(User, "Teacher"); }
+            }
+
+            //Add Student Role
+            roleCheck = await RoleManager.RoleExistsAsync("Student");
+            if (!roleCheck)
+            {
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Student"));
+            }
+
+            user = await UserManager.FindByEmailAsync("student@upravuvanje.com");
+            if (user == null)
+            {
+                var User = new UpravuvanjeUser();
+                User.Email = "student@upravuvanje.com";
+                User.UserName = "student@upravuvanje.com";
+                User.StudentId = 2;
+                string userPWD = "Student123";
+                IdentityResult chkUser = await UserManager.CreateAsync(User, userPWD);
+                if (chkUser.Succeeded) { var result1 = await UserManager.AddToRoleAsync(User, "Student"); }
+            }
+        }
         public static void Initialize(IServiceProvider serviceProvider)
         {
+            
             using (var context = new UpravuvanjeContext(
             serviceProvider.GetRequiredService<
             DbContextOptions<UpravuvanjeContext>>()))
             {
+                CreateUserRoles(serviceProvider).Wait();
+                //CreateUserRoles(serviceProvider).Wait();
                 // Look for any movies.
                 if (context.Course.Any() || context.Teacher.Any() || context.Student.Any())
                 {
@@ -24,14 +90,14 @@ namespace MVCMovie.Models
                 }
 
                 context.Teacher.AddRange(
-                    new Teacher { FirstName = "Даниел", LastName = "Денковски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Перо", LastName = "Латковски", Degree = "Професор", AcademicRank = "Доктор", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Марија", LastName = "Календар", Degree = "Професор", AcademicRank = "Доктор", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Ана", LastName = "Чолаковска", Degree = "Магистар", AcademicRank = "Магистар", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Горан", LastName = "Јакимовски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Марко", LastName = "Порјазовски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Владимир", LastName = "Атанасовски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") },
-                    new Teacher { FirstName = "Валентин", LastName = "Раковиќ", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3") }
+                    new Teacher { FirstName = "Даниел", LastName = "Денковски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Перо", LastName = "Латковски", Degree = "Професор", AcademicRank = "Доктор", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Марија", LastName = "Календар", Degree = "Професор", AcademicRank = "Доктор", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Ана", LastName = "Чолаковска", Degree = "Магистар", AcademicRank = "Магистар", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Горан", LastName = "Јакимовски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Марко", LastName = "Порјазовски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Владимир", LastName = "Атанасовски", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() },
+                    new Teacher { FirstName = "Валентин", LastName = "Раковиќ", Degree = "Професор", AcademicRank = "Доцент", OfficeNumber = "01234", HireDate = DateTime.Parse("2020-2-3"), Course1 = new List<Course>(), Course2 = new List<Course>() }
                     );
                 context.SaveChanges();
                 
@@ -91,16 +157,16 @@ namespace MVCMovie.Models
                 context.SaveChanges();
 
                 context.Enrollment.AddRange(
-                    new Enrollment { StudentId = 1, CourseId = 1 },
-                    new Enrollment { StudentId = 2, CourseId = 1 },
-                    new Enrollment { StudentId = 3, CourseId = 1 },
-                    new Enrollment { StudentId = 4, CourseId = 2 },
-                    new Enrollment { StudentId = 5, CourseId = 2 },
-                    new Enrollment { StudentId = 6, CourseId = 2 },
-                    new Enrollment { StudentId = 7, CourseId = 3 },
-                    new Enrollment { StudentId = 3, CourseId = 3 },
-                    new Enrollment { StudentId = 5, CourseId = 4 },
-                    new Enrollment { StudentId = 1, CourseId = 4 }
+                    new Enrollment { StudentId = 1, CourseId = 1, Year = 2021 },
+                    new Enrollment { StudentId = 2, CourseId = 1, Year = 2020 },
+                    new Enrollment { StudentId = 3, CourseId = 1, Year = 2021 },
+                    new Enrollment { StudentId = 4, CourseId = 2, Year = 2019 },
+                    new Enrollment { StudentId = 5, CourseId = 2, Year = 2020 },
+                    new Enrollment { StudentId = 6, CourseId = 2, Year = 2021 },
+                    new Enrollment { StudentId = 7, CourseId = 3, Year = 2021 },
+                    new Enrollment { StudentId = 3, CourseId = 3, Year = 2019 },
+                    new Enrollment { StudentId = 5, CourseId = 4, Year = 2020 },
+                    new Enrollment { StudentId = 1, CourseId = 4, Year = 2021 }
                     );
                 context.SaveChanges();
             }

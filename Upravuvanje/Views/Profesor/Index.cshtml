@@ -1,0 +1,77 @@
+﻿@model Upravuvanje.ViewModels.ProfesorViewModels
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Професор: Владимир Атанасовски</h1>
+<h2>Листа на предмети</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Profesori[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Profesori[0].Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Profesori[0].Semestar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Profesori[0].Programme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Profesori[0].EducationLevel)
+            </th>
+            <th>
+                Наставник 1
+            </th>
+            <th>
+               Наставник 2
+            </th>
+            <th>
+                Студенти
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Profesori)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credits)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Semestar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Programme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EducationLevel)
+                </td>
+                <td>
+                    @if (item.FirstTeacherId != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Teacher1.FullName)
+                    }
+                </td>
+                <td>
+                    @if (item.SecondTeacherId != null)
+                    {
+                         @Html.DisplayFor(modelItem => item.Teacher2.FullName)
+                    }
+                </td>
+                
+                <td>
+                    <a asp-action="Studenti" asp-route-id="@item.Id">Студенти</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

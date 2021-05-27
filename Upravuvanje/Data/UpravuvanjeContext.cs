@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Upravuvanje.Areas.Identity.Data;
 using Upravuvanje.Models;
 
 namespace Upravuvanje.Data
 {
-    public class UpravuvanjeContext : DbContext
+    public class UpravuvanjeContext : IdentityDbContext<UpravuvanjeUser>
     {
         public UpravuvanjeContext (DbContextOptions<UpravuvanjeContext> options)
             : base(options)
@@ -20,9 +22,10 @@ namespace Upravuvanje.Data
 
         public DbSet<Upravuvanje.Models.Teacher> Teacher { get; set; }
         public DbSet<Enrollment> Enrollment { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             builder.Entity<Enrollment>()
             .HasOne<Student>(p => p.Student)
             .WithMany(p => p.Courses)
@@ -42,6 +45,10 @@ namespace Upravuvanje.Data
             .HasOne<Teacher>(p => p.Teacher2)
             .WithMany(p => p.Course2)
             .HasForeignKey(p => p.SecondTeacherId);
+
+            base.OnModelCreating(builder);
+            
         }
+        
     }
 }
